@@ -18,20 +18,22 @@ export default function NotesApp() {
     // Fetch notes from MongoDB (simulated)
 
     useEffect(() => {
-        const fetchNotes = async () => {
-            try {
-                const response = await axios.get(`${API}/api/notes`);
-                setNotes(response.data);
-            } catch (err) {
-                console.error(err);
-                setError('Failed to fetch notes from server');
-            } finally {
-                setIsLoading(false);
-            }
-        };
+    const fetchNotes = async () => {
+        try {
+            // If API already includes /api/notes, just use API. Otherwise, append /api/notes.
+            const endpoint = API.endsWith('/api/notes') ? API : `${API}/api/notes`;
+            const response = await axios.get(endpoint);
+            setNotes(response.data);
+        } catch (err) {
+            console.error(err);
+            setError('Failed to fetch notes from server');
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
-        fetchNotes();
-    }, []);
+    fetchNotes();
+}, []);
 
     // Handle form submission
     const handleSubmit = async (e) => {
