@@ -20,7 +20,7 @@ export default function NotesApp() {
     useEffect(() => {
         const fetchNotes = async () => {
             try {
-                const response = await axios.get(`${API}`);
+                const response = await axios.get(`${API}`/api/notes);
                 setNotes(response.data);
             } catch (err) {
                 console.error(err);
