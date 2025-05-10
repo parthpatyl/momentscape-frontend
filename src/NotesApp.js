@@ -20,7 +20,7 @@ export default function NotesApp() {
     useEffect(() => {
         const testConnection = async () => {
             try {
-                const testEndpoint = `${API_URL}/api/test`;
+                const testEndpoint = `${API_URL}api/test`;
                 console.log("Testing API connection at:", testEndpoint);
                 await axios.get(testEndpoint, { timeout: 5000 });
                 setConnectionStatus('connected');
@@ -42,7 +42,7 @@ export default function NotesApp() {
             
             try {
                 setIsLoading(true);
-                const endpoint = `${API_URL}/api/notes`;
+                const endpoint = `${API_URL}api/notes`;
                 console.log("Fetching notes from:", endpoint);
                 const response = await axios.get(endpoint);
                 console.log("Notes fetched:", response.data);
