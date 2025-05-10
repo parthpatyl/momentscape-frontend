@@ -68,7 +68,7 @@ export default function NotesApp() {
         try {
             if (editingId) {
                 // Update existing note
-                const response = await axios.put(`${API_URL}/api/notes/${editingId}`, {
+                const response = await axios.put(`${API_URL}api/notes/${editingId}`, {
                     title,
                     content
                 });
@@ -80,7 +80,7 @@ export default function NotesApp() {
                 setEditingId(null);
             } else {
                 // Create new note
-                const response = await axios.post(`${API_URL}/api/notes`, {
+                const response = await axios.post(`${API_URL}api/notes`, {
                     title,
                     content
                 });
@@ -110,7 +110,7 @@ export default function NotesApp() {
     // Delete a note
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`${API_URL}/api/notes/${id}`);
+            await axios.delete(`${API_URL}api/notes/${id}`);
             const updatedNotes = notes.filter(note => note._id !== id);
             setNotes(updatedNotes);
             setError(null);
