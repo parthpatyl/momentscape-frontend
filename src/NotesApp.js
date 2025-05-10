@@ -6,6 +6,13 @@ import axios from 'axios';
 // Improved API URL handling
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
+// Note colors for styling
+const NOTE_COLORS = [
+    "bg-yellow-100",
+    "bg-emerald-100",
+    "bg-rose-100"
+];
+
 // Main Notes App Component
 export default function NotesApp() {
     const [notes, setNotes] = useState([]);
@@ -39,7 +46,7 @@ export default function NotesApp() {
     useEffect(() => {
         const fetchNotes = async () => {
             if (connectionStatus !== 'connected') return;
-            
+
             try {
                 setIsLoading(true);
                 const endpoint = `${API_URL}api/notes`;
@@ -72,9 +79,9 @@ export default function NotesApp() {
                     title,
                     content
                 });
-                
+
                 const updatedNote = response.data;
-                setNotes(notes.map(note => 
+                setNotes(notes.map(note =>
                     note._id === editingId ? updatedNote : note
                 ));
                 setEditingId(null);
@@ -87,7 +94,7 @@ export default function NotesApp() {
                 const newNote = response.data;
                 setNotes([newNote, ...notes]);
             }
-            
+
             setTitle('');
             setContent('');
             setError(null);
@@ -143,32 +150,6 @@ export default function NotesApp() {
     if (connectionStatus === 'checking') {
         return <div className="flex items-center justify-center h-screen">Connecting to server...</div>;
     }
-    
-    if (connectionStatus === 'failed') {
-        return (
-            <div className="min-h-screen bg-wavy flex flex-col items-center justify-center p-4">
-                <div className="bg-white p-6 rounded-lg shadow-md max-w-md w-full">
-                    <h2 className="text-2xl font-bold text-red-600 mb-4">Connection Failed</h2>
-                    <p className="mb-4">{error}</p>
-                    <div className="bg-gray-100 p-4 rounded-md mb-4">
-                        <h3 className="font-bold mb-2">Troubleshooting Steps:</h3>
-                        <ol className="list-decimal pl-4">
-                            <li>Make sure your backend server is running</li>
-                            <li>Check that your REACT_APP_API_URL environment variable is correct</li>
-                            <li>Verify CORS is configured properly on the server</li>
-                            <li>Check console for specific error messages</li>
-                        </ol>
-                    </div>
-                    <button 
-                        onClick={() => window.location.reload()}
-                        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-                    >
-                        Try Again
-                    </button>
-                </div>
-            </div>
-        );
-    }
 
     if (isLoading) {
         return <div className="flex items-center justify-center h-screen">Loading notes...</div>;
@@ -176,7 +157,7 @@ export default function NotesApp() {
 
     return (
         <div className="min-h-screen bg-wavy text-gray-900">
-            <header className="bg-transparent text-black p-4">
+            <header className="text-amber-500 p-4">
                 <div className="container mx-auto flex flex-col items-center justify-center">
                     <img
                         src="/logo.png" // Change this path to your logo file or use a URL
@@ -194,11 +175,11 @@ export default function NotesApp() {
                     <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
                         <strong className="font-bold mr-1">Error:</strong>
                         <span className="block sm:inline">{error}</span>
-                        <button 
+                        <button
                             className="absolute top-0 bottom-0 right-0 px-4"
                             onClick={() => setError(null)}
                         >
-                            <X size={16} />
+                            <X size={20} />
                         </button>
                     </div>
                 </div>
@@ -211,33 +192,30 @@ export default function NotesApp() {
                     onSubmit={handleSubmit}
                     className="relative mb-8"
                 >
-                    {/* Shadow box behind */}
-                    <div className="absolute inset-0 translate-x-3 translate-y-3 bg-neutral-900 opacity-70 -z-10"></div>
                     {/* Main form box */}
-                    <div className="bg-amber-500 p-6 relative z-10">
+                    <div className="bg-slate-100 bg-opacity-30 backdrop-blur-md backdrop-contrast-100 text-blue-100 rounded-md p-6 relative z-10">
                         <h2 className="text-3xl font-bold mb-4">
                             {editingId ? 'Edit Note' : 'Hi, Parth Nilamkumar Patil'}
                         </h2>
-                        {/* ...rest of your form fields/buttons... */}
                         <div className="mb-4">
-                            <label htmlFor="title" className="block text-gray-700 mb-2">Whats on your mind today?</label>
+                            <label htmlFor="title" className="block text-lg text-blue-200 mb-2">Whats on your mind today?</label>
                             <input
                                 type="text"
                                 id="title"
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
-                                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-rose-400"
+                                className="w-full px-3 py-2 border bg-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-amber-400 placeholder-neutral-800"
                                 placeholder="start typing..."
                                 required
                             />
                         </div>
                         <div className="mb-4">
-                            <label htmlFor="content" className="block text-gray-700 mb-2">Elaborate</label>
+                            <label htmlFor="content" className="block text-lg text-blue-100 mb-2">Elaborate</label>
                             <textarea
                                 id="content"
                                 value={content}
                                 onChange={(e) => setContent(e.target.value)}
-                                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-rose-400 h-32"
+                                className="w-full px-3 py-2 border bg-transparent text-white rounded-md focus:outline-none focus:ring-2 focus:ring-amber-400 h-32 placeholder-neutral-800"
                                 placeholder="...its your space."
                                 required
                             />
@@ -272,8 +250,11 @@ export default function NotesApp() {
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {notes.map(note => (
-                            <div key={note._id} className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                        {notes.map((note, idx) => (
+                            <div
+                                key={note._id}
+                                className={`${NOTE_COLORS[idx % NOTE_COLORS.length]} p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow`}
+                            >
                                 <h3 className="text-xl font-bold mb-2 text-blue-600">{note.title}</h3>
                                 <p className="text-gray-600 mb-4 whitespace-pre-wrap">{note.content}</p>
                                 <div className="text-xs text-gray-500 mb-4">
