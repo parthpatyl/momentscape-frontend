@@ -8,9 +8,38 @@ const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 // Note colors for styling
 const NOTE_COLORS = [
-    "bg-yellow-100",
-    "bg-emerald-100",
-    "bg-rose-100"
+    // Warm sand
+    "bg-amber-100 bg-opacity-80 backdrop-blur-sm",
+    // Misty blue
+    "bg-blue-50 bg-opacity-80 backdrop-blur-sm",
+    // Olive green
+    "bg-lime-100 bg-opacity-80 backdrop-blur-sm",
+    // Soft clay
+    "bg-orange-50 bg-opacity-80 backdrop-blur-sm",
+    // Cloud gray
+    "bg-gray-100 bg-opacity-80 backdrop-blur-sm",
+    // Blush pink
+    "bg-pink-50 bg-opacity-80 backdrop-blur-sm"
+];
+
+// Add emoji icons for notes
+const NOTE_EMOJIS = [
+    "📝",
+    "🌟",
+    "💡",
+    "📒",
+    "🎯",
+    "✨"
+];
+
+// Title color/font style classes for notes
+const NOTE_TITLE_STYLES = [
+    "text-amber-900 font-bold",      // warm sand
+    "text-blue-900 font-semibold",   // misty blue
+    "text-lime-900 italic",          // olive green
+    "text-orange-900 font-bold",     // soft clay
+    "text-gray-700 font-semibold",   // cloud gray
+    "text-pink-900 italic"           // blush pink
 ];
 
 // Main Notes App Component
@@ -223,7 +252,7 @@ export default function NotesApp() {
                         <div className="flex flex-wrap gap-2">
                             <button
                                 type="submit"
-                                className="bg-blue-700 text-white px-4 py-2 rounded-lg hover:bg-sky-600 flex items-center"
+                                className="bg-amber-200 text-amber-900 px-4 py-2 rounded-lg hover:bg-amber-300 flex items-center"
                             >
                                 <Save size={18} className="mr-1" />
                                 {editingId ? 'Update Note' : 'Save Note'}
@@ -249,15 +278,21 @@ export default function NotesApp() {
                         </p>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="columns-2 md:columns-3 lg:columns-4 gap-6">
                         {notes.map((note, idx) => (
                             <div
                                 key={note._id}
-                                className={`${NOTE_COLORS[idx % NOTE_COLORS.length]} p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow`}
+                                className={`break-inside-avoid ${NOTE_COLORS[idx % NOTE_COLORS.length]} p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow mb-4`}
                             >
-                                <h3 className="text-xl font-bold mb-2 text-blue-600">{note.title}</h3>
-                                <p className="text-gray-600 mb-4 whitespace-pre-wrap">{note.content}</p>
-                                <div className="text-xs text-gray-500 mb-4">
+                                {/* Emoji icon */}
+                                <div className="text-3xl mb-2">
+                                    {NOTE_EMOJIS[idx % NOTE_EMOJIS.length]}
+                                </div>
+                                <div className={`text-lg mb-2 ${NOTE_TITLE_STYLES[idx % NOTE_TITLE_STYLES.length]}`}>
+                                    {note.title}
+                                </div>
+                                <p className="text-gray-700 mb-4 whitespace-pre-wrap">{note.content}</p>
+                                <div className="text-xs text-gray-800 mb-4">
                                     {formatDate(note.createdAt)}
                                     {note.updatedAt && ` (Updated: ${formatDate(note.updatedAt)})`}
                                 </div>
